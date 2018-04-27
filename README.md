@@ -1,6 +1,9 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 ***
-_Click the `Release` tab to download pre-compiled `.hex` files or just [click here](https://github.com/gnea/grbl-Mega/releases)_
+Added secondary serial input stream for MPG input. I have also added what I believe to be an improved jog cancel implementation, this can be reverted to default by commenting out a line in serial.h.
+
+RX1 is the pin to use for the secondary input stream, connect a switch between TX3 and GND to switch between MPG and normal mode.
+NOTE: Switching to MPG mode is only allowed when grbl is in IDLE mode.
 ***
 
 Grbl is a no-compromise, high performance, low cost alternative to parallel-port-based motion control for CNC milling. This version of Grbl runs on an Arduino Mega2560 only.

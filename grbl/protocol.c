@@ -2,6 +2,7 @@
   protocol.c - controls Grbl execution protocol and procedures
   Part of Grbl
 
+  Copyright (c) 2018 Terje Io (added improved(?) jog cancel code)
   Copyright (c) 2011-2016 Sungeun K. Jeon for Gnea Research LLC
   Copyright (c) 2009-2011 Simen Svale Skogsrud
 
@@ -76,7 +77,16 @@ void protocol_main_loop()
     // Process one line of incoming serial data, as the data becomes available. Performs an
     // initial filtering by removing spaces and comments and capitalizing all letters.
     while((c = serial_read()) != SERIAL_NO_DATA) {
-      if ((c == '\n') || (c == '\r')) { // End of line reached
+
+	#ifdef SERIAL_CANCEL
+      if(c == SERIAL_CANCEL) {
+		line_flags = char_counter = 0;
+		if (sys.state & STATE_JOG) // Block all other states from invoking motion cancel.
+	      system_set_exec_state_flag(EXEC_MOTION_CANCEL); 
+	  } else
+	#endif
+
+	  if ((c == '\n') || (c == '\r')) { // End of line reached
 
         protocol_execute_realtime(); // Runtime command check point.
         if (sys.abort) { return; } // Bail to calling function upon system abort

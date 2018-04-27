@@ -22,6 +22,8 @@
 #ifndef serial_h
 #define serial_h
 
+// Comment out to revert to default jog cancel handling
+#define SERIAL_CANCEL 0x18
 
 #ifndef RX_BUFFER_SIZE
   #define RX_BUFFER_SIZE 255
@@ -34,6 +36,9 @@
 
 
 void serial_init();
+
+// Select serial input stream depending on MPG mode
+void serial_select(uint8_t mpg_mode);
 
 // Writes one byte to the TX serial buffer. Called by main program.
 void serial_write(uint8_t data);

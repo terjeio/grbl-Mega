@@ -443,6 +443,7 @@ void report_echo_line_received(char *line)
  // especially during g-code programs with fast, short line segments and high frequency reports (5-20Hz).
 void report_realtime_status()
 {
+  static uint8_t mpg_mode = 0;
   uint8_t idx;
   int32_t current_position[N_AXIS]; // Copy current state of the system position variable
   memcpy(current_position,sys_position,sizeof(sys_position));
@@ -596,6 +597,12 @@ void report_realtime_status()
       }  
     }
   #endif
+
+  if(sys.mpg_mode != mpg_mode) {
+    printPgmString(PSTR("|MPG:"));
+    serial_write(sys.mpg_mode ? '1' : '0');
+    mpg_mode = sys.mpg_mode;
+  }
 
   serial_write('>');
   report_util_line_feed();
